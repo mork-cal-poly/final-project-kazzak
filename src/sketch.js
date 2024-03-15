@@ -14,15 +14,26 @@ function draw() {
     textSize(20);
     text("The Story of Humpty Dumpty", 80, 200);
   }
-  if (timer > 200 && timer < 600){
+  if (timer > 200 && timer < 400) {
+    textSize(20);
+    text("The Story of Humpty Dumpty", 80, 200);
+    textSize(10);
+    text("by Abby, Kira and Zoe", 160, 220);
+  }
+  if (timer > 400 && timer < 500) {
+    textSize(20);
+    text("", 80, 200);
+  }
+  if (timer > 500 && timer < 800){
     background(183,219,239);
     drawClouds(cloudX,cloudY);
     cloudX = cloudX + 1;
     cloudY = cloudY + 0;
     drawHumpty(240,234);
-
-
+    textSize(10);
+    text("Humpty Dumpty sat on a wall...", 5, 15);
   }
+  
   timer++;
 }
 
