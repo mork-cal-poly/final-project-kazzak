@@ -1,4 +1,6 @@
 let timer = 0;
+let cloudX = 0;
+let cloudY = 0;
 
 function setup() {
   let myCanvas = createCanvas(400, 400);
@@ -6,21 +8,25 @@ function setup() {
 }
 
 function draw() {
-  background(220);
+  background(235,222,240);
 
   if (timer > 60 && timer < 200) {
     textSize(20);
     text("The Story of Humpty Dumpty", 80, 200);
   }
   if (timer > 200 && timer < 600){
+    background(183,219,239);
+    drawClouds(cloudX,cloudY);
+    cloudX = cloudX + 1;
+    cloudY = cloudY + 0;
     drawHumpty(240,234);
-    drawClouds(95,50);
+
+
   }
   timer++;
 }
 
 function drawHumpty(x,y) {
-  background (183,219,239);
   //body
   fill(240,234,214);
   ellipse (200,100, 100, 130);
@@ -49,8 +55,10 @@ function drawHumpty(x,y) {
 }
 
 function drawClouds(x,y) {
-    fill(255);
-    noStroke();
+  push();  
+  translate(x,y);
+  fill(255);
+  noStroke();
     //cloud 1
     ellipse (75,50,35,20)
     ellipse (95,50,45,30)
@@ -59,5 +67,9 @@ function drawClouds(x,y) {
     ellipse (275,90,35,20)
     ellipse (295,90,45,30)
     ellipse (315,90,35,20)
-
+    //cloud 3
+    ellipse (0,90,35,20)
+    ellipse (25,90,45,30)
+    ellipse (50,90,35,20)
+  pop();
 }
