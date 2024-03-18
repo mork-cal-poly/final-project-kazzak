@@ -1,15 +1,17 @@
 let timer = 0;
 let animationSpeed = 2;
 let legsOpen = true;
-rr= 0;
-lr = 0;
+let rr= 0;
+let lr = 0;
 let xStart = [];
 let brickWidth = [];
+let ey=0
 
 function setup() {
   // For ordering nodes in the DOM
   let myCanvas = createCanvas(400, 400);
   myCanvas.parent("canvas-parent");
+  frameRate(20);
   for (let i = 0; i < 6; i++) {
     xStart.push(random(50) * -1);
     brickWidth.push([]);
@@ -25,13 +27,12 @@ function setup() {
 }
 
 function draw(){
-
-  if (timer > 3 && timer < 100) {
+  if (timer > 3 && timer < 80) {
     drawLandscape();
     drawWall();
-    drawHorse(70,270);
-    drawHorse(200,270);
-    drawHorse(150,270);
+    drawHorse(70,270, ey);
+    drawHorse(200,270, ey);
+    drawHorse(150,270, ey);
     
     legsOpen =! legsOpen
     
@@ -39,23 +40,33 @@ function draw(){
     lr -= PI / 6.0
     rr += PI / 6.0
     }
-    else 
-    {lr += PI / 6.0
-    rr -= PI / 6.0}
-    frameRate(20);
+    else {
+      lr += PI / 6.0
+      rr -= PI / 6.0
+    }
   }
   timer++;
 
-  if (timer > 100 && timer < 200) {
+  if (timer > 80 && timer < 200) {
     drawLandscape();
     drawStillWall();
-  drawHumpity(150,300,0);
-  drawHumpity(250,300,5);
-  drawGhost();
+    drawHorse(100, 270, ey);
+    drawHumpity(150,300,0);
+    drawHumpity(250,300,5);
+    drawGhost();
+    drawHorse(50, 270, ey);
+    drawHorse(-5, 270, ey);
+    if (timer > 90 && timer < 200)
+    {
+      targetGy -= 400; 
+      loop(); 
+      frameRate(40); 
+      animationSpeed = 5
+      while (ey<5)
+      ey+=1
+    }
   }
-  
 }
-
 
 function drawLandscape() {
   background(135, 206, 250);
@@ -69,7 +80,7 @@ function drawStillWall(){
   let y = 100;
   let rowNum = 0;
   while (y <= 250){
-    drawRow(y, rowNum);
+    drawStillRow(y, rowNum);
     y += 30;
     rowNum++;
   }
@@ -81,7 +92,7 @@ function drawStillRow(y, rowNum){
   let brick = 0;
   while (x <= width) {
     let w = brickWidth[rowNum][brick];
-    drawBrick(x, y, w);
+    drawStillBrick(x, y, w);
     x += w;
     brick++;
   }
@@ -100,8 +111,7 @@ function drawHumpity(eggx, eggy, r){
   push();
   translate(eggx, eggy);
   rotate(r);
-  noStroke();
-  fill (255);
+  fill(240,234,214);
   arc(0, 0, 100, 100, PI/4, PI*5/4);
   pop();
 }
@@ -112,34 +122,23 @@ let targetGy = 0;
 function drawGhost(){
   push();
   translate(200, 200);
+  noStroke()
   fill (255);
   triangle(-50,gy,50,gy,0,gy+100)
   ellipse(0, gy, 100);
+  stroke(0)
   noFill()
-  line(20,gy+10,-20,gy-10)
-  line(-20,gy+10,20,gy-10)
+  line(30,gy+10,10,gy-10)
+  line(10,gy+10,30,gy-10)
+  line(-30,gy+10,-10,gy-10)
+  line(-10,gy+10,-30,gy-10)
+  line(5,gy,-5,gy)
   pop();
   
   if (gy !== targetGy) {
     let direction = (targetGy - gy) / abs(targetGy - gy); 
     gy += direction * animationSpeed; 
   }
-}
-
-function mouseClicked() {
-  targetGy -= 400; 
-  //loop(); 
-  frameRate(60); 
-}
-
-function drawLandscape() {
-  // Sky
-  background(135, 206, 250);
-
-  // cement
-  fill(220);
-  rect(0, height / 2, width, height / 2);
-  
 }
 
 function drawWall(){
@@ -169,10 +168,10 @@ function drawBrick(x, y, w) {
   pop();
 }
 
-function drawHorse(x,y) {
+function drawHorse(x,y,ey) {
   push();
   translate(x, y);
-  fill(255);
+  fill(196, 164, 132);
   drawLegs(30, 20, rr);
   drawLegs(10, 20,rr);
   drawLegs(-20, 20, lr);
@@ -186,8 +185,8 @@ function drawHorse(x,y) {
   ellipse(50, -70, 15);
   ellipse(80, -70, 15);
   fill(0);
-  ellipse(50, -70, 7);
-  ellipse(80, -70, 7);
+  ellipse(50, ey -70, 7);
+  ellipse(80, ey -70, 7);
   ellipse(65, -55, 5);
   ellipse(75, -55, 5);
   pop();
