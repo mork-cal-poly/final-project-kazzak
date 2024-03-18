@@ -1,6 +1,8 @@
 let timer = 0;
 let cloudX = 0;
 let cloudY = 0;
+let animationStarted = false;
+let smallHumptyClicked = false;
 let animationSpeed = 2;
 let legsOpen = true;
 let rr= 0;
@@ -28,9 +30,11 @@ function setup() {
       x += w;
     }
   }
+  myCanvas.mousePressed(checkClick);
 }
 
 function draw() {
+  if (animationStarted){
   background(183,219,239);
   drawClouds(cloudX,cloudY);
   cloudX = cloudX + 1;
@@ -41,7 +45,7 @@ function draw() {
     textSize(15);
     fill(0);
     drawStillWall();
-    text("Humpty Dumpty sat on a wall...", 5,15);
+    text("Humpty Dumpty sat on a wall...",200,20);
     drawHumpty();
     drawRocks();
   }
@@ -49,7 +53,7 @@ function draw() {
     textSize(15);
     fill(0);
     drawStillWall();
-    text("Humpty Dumpty had a great fall...", 5,15);
+    text("Humpty Dumpty had a great fall...", 200,20);
     drawHumptyShock(100, 350, -PI/2);
     drawRocks();
   }
@@ -57,7 +61,7 @@ function draw() {
     textSize(15);
     fill(0);
     drawStillWall();
-    text("Humpty Dumpty had a great fall...", 5,15);
+    text("Humpty Dumpty had a great fall...", 200,20);
     drawHumptyShock(400, 350, PI);
     drawRocks();
   }
@@ -65,7 +69,7 @@ function draw() {
     textSize(15);
     fill(0);
     drawStillWall();
-    text("Humpty Dumpty had a great fall...", 5,15);
+    text("Humpty Dumpty had a great fall...", 200,20);
     drawBrokenHumpty(150,300,0);
     drawBrokenHumpty(250,300,5);
     drawRocks();
@@ -75,7 +79,7 @@ function draw() {
     drawLandscape();
     textSize(15);
     fill(0);
-    text("All the king's horses and all the king's men...", 5,15);
+    text("All the king's horses (and all the king's men)...", 200,20);
     drawWall();
     drawHorse(70,270, ey);
     drawHorse(200,270, ey);
@@ -92,19 +96,19 @@ function draw() {
       rr -= PI / 6.0
     }
   }
-  if (timer > 375 && timer < 500) {
+  if (timer > 375 && timer < 475) {
     drawLandscape();
     drawStillWall();
     textSize(15);
     fill(0);
-    text("Couldn't put Humpty back together again.", 5,15);
+    text("Couldn't put Humpty back together again.", 200,20);
     drawHorse(100, 270, ey);
     drawBrokenHumpty(150,300,0);
     drawBrokenHumpty(250,300,5);
     drawGhost();
     drawHorse(50, 270, ey);
     drawHorse(-5, 270, ey);
-    if (timer > 400 && timer < 500)
+    if (timer > 380 && timer < 475)
     {
       targetGy -= 400; 
       loop(); 
@@ -114,7 +118,62 @@ function draw() {
       ey+=1
     }
   }
+  if (timer > 475){
+    background(183, 219, 239)
+    textSize(10);
+    fill(0);
+    text("The End!", 200,300);
+    drawSmallHumpty();
+  }
     timer++;
+} else{
+  background(183, 219, 239);
+  textSize(10);
+  textAlign(CENTER, CENTER);
+  fill(0);
+  text("click me!", 200, 300);
+  drawSmallHumpty();
+}
+}
+function checkClick() {
+  if (!animationStarted) {
+    if (
+      mouseX >= 175 &&
+      mouseX <= 225 &&
+      mouseY >= 175 &&
+      mouseY <= 225
+    ) {
+      animationStarted = true;
+      smallHumptyClicked = true;
+    }
+  }
+}
+function drawSmallHumpty() {
+  //body
+  fill(240, 234, 214);
+  ellipse(200, 200, 50, 65);
+  //eyes
+  fill(0);
+  ellipse(185, 200, 7.5);
+  ellipse(215, 200, 7.5);
+  //eye whites
+  fill(255);
+  ellipse(186.5, 198, 2.5);
+  ellipse(216.5, 198, 2.5);
+  //blush
+  fill(255, 192, 203);
+  noStroke();
+  ellipse(180, 210, 5, 2.5);
+  ellipse(220, 210, 5, 2.5);
+  //smile
+  noFill();
+  stroke(0);
+  arc(200, 210, 10, 7.5, 0, PI);
+  //arms and legs
+  line(176, 190, 170, 180);
+  line(224, 190, 230, 180);
+  line(190, 230, 190, 240);
+  line(210, 230, 210, 240);
 }
 
 function drawLandscape() {
