@@ -14,7 +14,6 @@ let gy = 0;
 let targetGy = 0;
 
 function setup() {
-  // For ordering nodes in the DOM
   let myCanvas = createCanvas(400, 400); 
   myCanvas.parent("canvas-parent"); 
 
