@@ -131,7 +131,7 @@ function draw() {
   textSize(10);
   textAlign(CENTER, CENTER);
   fill(0);
-  text("click me!", 200, 300);
+  text("click Humpty to start!", 200, 300);
   drawSmallHumpty();
 }
 }
