@@ -57,7 +57,7 @@ function draw() {
     drawHumptyShock(100, 350, -PI/2);
     drawRocks();
   }
-  if (timer >= 200 && timer < 225) {
+  if (timer >= 200 && timer < 235) {
     textSize(15);
     fill(0);
     drawStillWall();
@@ -65,7 +65,7 @@ function draw() {
     drawHumptyShock(400, 350, PI);
     drawRocks();
   }
-  if (timer >= 225 && timer < 330) {
+  if (timer >= 235 && timer < 325) {
     textSize(15);
     fill(0);
     drawStillWall();
@@ -74,9 +74,8 @@ function draw() {
     drawBrokenHumpty(250,300,5);
     drawRocks();
   }
-  if (timer > 330 && timer < 375) {
+  if (timer >= 325 && timer < 375) {
     frameRate(20);
-    drawLandscape();
     textSize(15);
     fill(0);
     text("All the king's horses (and all the king's men)...", 200,20);
@@ -96,8 +95,7 @@ function draw() {
       rr -= PI / 6.0
     }
   }
-  if (timer > 375 && timer < 475) {
-    drawLandscape();
+  if (timer >= 375 && timer < 500) {
     drawStillWall();
     textSize(15);
     fill(0);
@@ -108,7 +106,7 @@ function draw() {
     drawGhost();
     drawHorse(50, 270, ey);
     drawHorse(-5, 270, ey);
-    if (timer > 380 && timer < 475)
+    if (timer > 380 && timer < 500)
     {
       targetGy -= 400; 
       loop(); 
@@ -118,7 +116,7 @@ function draw() {
       ey+=1
     }
   }
-  if (timer > 475){
+  if (timer >= 500){
     background(183, 219, 239)
     textSize(10);
     fill(0);
@@ -174,12 +172,6 @@ function drawSmallHumpty() {
   line(224, 190, 230, 180);
   line(190, 230, 190, 240);
   line(210, 230, 210, 240);
-}
-
-function drawLandscape() {
-  background(135, 206, 250);
-  fill(220);
-  rect(0, height / 2, width, height / 2);
 }
 
 function drawStillWall(){
