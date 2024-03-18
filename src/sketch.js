@@ -3,15 +3,19 @@ let cloudX = 0;
 let cloudY = 0;
 let animationSpeed = 2;
 let legsOpen = true;
-rr= 0;
-lr = 0;
-
+let rr= 0;
+let lr = 0;
 let xStart = [];
 let brickWidth = [];
+let ey=0
+let gy = 0;
+let targetGy = 0;
+
 function setup() {
   // For ordering nodes in the DOM
   let myCanvas = createCanvas(400, 400); 
   myCanvas.parent("canvas-parent"); 
+
   for (let i = 0; i < 6; i++) {
     xStart.push(random(50) * -1);
     brickWidth.push([]);
@@ -32,46 +36,50 @@ function draw() {
   cloudX = cloudX + 1;
   cloudY = cloudY + 0;
   drawGround();
-  drawWall();
 
-  if (timer < 200) {
+  if (timer < 150) {
     textSize(15);
     fill(0);
-    text("Humpty Dupty sat on a wall...", 5,15);
+    drawStillWall();
+    text("Humpty Dumpty sat on a wall...", 5,15);
     drawHumpty();
     drawRocks();
   }
-  if (timer >= 200 && timer < 250) {
+  if (timer >= 150 && timer < 200) {
     textSize(15);
     fill(0);
-    text("Humpty Dupty had a great fall...", 5,15);
+    drawStillWall();
+    text("Humpty Dumpty had a great fall...", 5,15);
     drawHumptyShock(100, 350, -PI/2);
     drawRocks();
   }
-  if (timer >= 250 && timer < 300) {
+  if (timer >= 200 && timer < 225) {
     textSize(15);
     fill(0);
-    text("Humpty Dupty had a great fall...", 5,15);
+    drawStillWall();
+    text("Humpty Dumpty had a great fall...", 5,15);
     drawHumptyShock(400, 350, PI);
     drawRocks();
   }
-  if (timer >= 300) {
+  if (timer >= 225 && timer < 330) {
     textSize(15);
     fill(0);
-    text("Humpty Dupty had a great fall...", 5,15);
+    drawStillWall();
+    text("Humpty Dumpty had a great fall...", 5,15);
     drawBrokenHumpty(150,300,0);
     drawBrokenHumpty(250,300,5);
     drawRocks();
   }
-  if (timer > 400 && timer < 500) {
+  if (timer > 330 && timer < 375) {
+    frameRate(20);
+    drawLandscape();
     textSize(15);
     fill(0);
     text("All the king's horses and all the king's men...", 5,15);
-    drawLandscape();
     drawWall();
-    drawHorse(70,270);
-    drawHorse(200,270);
-    drawHorse(150,270);
+    drawHorse(70,270, ey);
+    drawHorse(200,270, ey);
+    drawHorse(150,270, ey);
     
     legsOpen =! legsOpen
     
@@ -79,27 +87,69 @@ function draw() {
     lr -= PI / 6.0
     rr += PI / 6.0
     }
-    else 
-    {lr += PI / 6.0
-    rr -= PI / 6.0}
-    frameRate(20);
+    else {
+      lr += PI / 6.0
+      rr -= PI / 6.0
+    }
   }
-
-  if (timer > 500 && timer < 600) {
+  if (timer > 375 && timer < 500) {
     drawLandscape();
     drawStillWall();
-  drawHumpity(150,300,0);
-  drawHumpity(250,300,5);
-  drawGhost();
-  }
-  if (timer >=600){
-    background(255);
-    fill(255);
-    textSize(20);
+    textSize(15);
     fill(0);
-    text("~The End~", 150,200);
+    text("Couldn't put Humpty back together again.", 5,15);
+    drawHorse(100, 270, ey);
+    drawBrokenHumpty(150,300,0);
+    drawBrokenHumpty(250,300,5);
+    drawGhost();
+    drawHorse(50, 270, ey);
+    drawHorse(-5, 270, ey);
+    if (timer > 400 && timer < 500)
+    {
+      targetGy -= 400; 
+      loop(); 
+      frameRate(40); 
+      animationSpeed = 5
+      while (ey<5)
+      ey+=1
+    }
   }
-  timer++;
+    timer++;
+}
+
+function drawLandscape() {
+  background(135, 206, 250);
+  fill(220);
+  rect(0, height / 2, width, height / 2);
+}
+
+function drawStillWall(){
+  let y = 150;
+  let rowNum = 0;
+  while (y <= 300){
+    drawStillRow(y, rowNum);
+    y += 30;
+    rowNum++;
+  }
+}
+
+function drawStillRow(y, rowNum){
+  let x = xStart[rowNum];
+  let brick = 0;
+  while (x <= width) {
+    let w = brickWidth[rowNum][brick];
+    drawStillBrick(x, y, w);
+    x += w;
+    brick++;
+  }
+}
+
+function drawStillBrick(x, y, w) {
+  push();
+  translate(x, y);
+  fill(139, 69, 19);
+  rect(0, 0, w, 30);
+  pop();
 }
 
 function drawHumpty() {
@@ -171,37 +221,6 @@ function drawBrokenHumpty(eggx, eggy, r){
   pop();
 }
 
-function drawWall(){
-  let y = 160;
-  let rowNum = 0;
-  while (y <= 300){
-    drawRow(y, rowNum);
-    y += 30;
-    rowNum++;
-  }
-}
-
-// brick row
-function drawRow(y, rowNum){
-  let x = xStart[rowNum];
-  let brick = 0;
-  while (x <= width) {
-    let w = brickWidth[rowNum][brick];
-    drawBrick(x, y, w);
-    x += w;
-    brick++;
-  }
-}
-
-// brick
-function drawBrick(x, y, w) {
-  push();
-  translate(x, y);
-  fill(139, 69, 19);
-  rect(0, 0, w, 30);
-  pop();
-}
-
 function drawGround() {
   fill(220);
   rect(0, height / 2, width, height / 2);
@@ -235,67 +254,20 @@ function drawRocks(x,y){
   ellipse(70, 330, 10);
 }
 
-function drawLandscape() {
-  background(135, 206, 250);
-
-  fill(220);
-  rect(0, height / 2, width, height / 2);
-  
-}
-
-function drawStillWall(){
-  let y = 100;
-  let rowNum = 0;
-  while (y <= 250){
-    drawRow(y, rowNum);
-    y += 30;
-    rowNum++;
-  }
-}
-
-// brick row
-function drawStillRow(y, rowNum){
-  let x = xStart[rowNum];
-  let brick = 0;
-  while (x <= width) {
-    let w = brickWidth[rowNum][brick];
-    drawBrick(x, y, w);
-    x += w;
-    brick++;
-  }
-}
-
-// brick
-function drawStillBrick(x, y, w) {
-  push();
-  translate(x, y);
-  fill(139, 69, 19);
-  rect(0, 0, w, 30);
-  pop();
-}
-
-function drawHumpity(eggx, eggy, r){
-  push();
-  translate(eggx, eggy);
-  rotate(r);
-  stroke(0);
-  fill (240,234,214);
-  arc(0, 0, 100, 100, PI/4, PI*5/4);
-  pop();
-}
-
-let gy = 0;
-let targetGy = 0;
-
 function drawGhost(){
   push();
   translate(200, 200);
+  noStroke()
   fill (255);
   triangle(-50,gy,50,gy,0,gy+100)
   ellipse(0, gy, 100);
+  stroke(0)
   noFill()
-  line(20,gy+10,-20,gy-10)
-  line(-20,gy+10,20,gy-10)
+  line(30,gy+10,10,gy-10)
+  line(10,gy+10,30,gy-10)
+  line(-30,gy+10,-10,gy-10)
+  line(-10,gy+10,-30,gy-10)
+  line(5,gy,-5,gy)
   pop();
   
   if (gy !== targetGy) {
@@ -304,25 +276,9 @@ function drawGhost(){
   }
 }
 
-function mouseClicked() {
-  targetGy -= 400; 
-  //loop(); 
-  frameRate(60); 
-}
-
-function drawLandscape() {
-  // Sky
-  background(135, 206, 250);
-
-  // cement
-  fill(220);
-  rect(0, height / 2, width, height / 2);
-
-}
-
 function drawWall(){
-  let y = 100;
-  while (y <= 250){
+  let y = 150;
+  while (y <= 300){
     drawRow(y);
     y += 30;
   }
@@ -347,10 +303,10 @@ function drawBrick(x, y, w) {
   pop();
 }
 
-function drawHorse(x,y) {
+function drawHorse(x,y,ey) {
   push();
   translate(x, y);
-  fill(255);
+  fill(196, 164, 132);
   drawLegs(30, 20, rr);
   drawLegs(10, 20,rr);
   drawLegs(-20, 20, lr);
@@ -364,8 +320,8 @@ function drawHorse(x,y) {
   ellipse(50, -70, 15);
   ellipse(80, -70, 15);
   fill(0);
-  ellipse(50, -70, 7);
-  ellipse(80, -70, 7);
+  ellipse(50, ey -70, 7);
+  ellipse(80, ey -70, 7);
   ellipse(65, -55, 5);
   ellipse(75, -55, 5);
   pop();
